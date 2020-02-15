@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Chat = undefined;
 
 var _mongoose = require("mongoose");
 
@@ -33,4 +34,5 @@ const chatSchema = new Schema({
     required: true
   }
 });
-exports.default = _mongoose2.default.model("chat", chatSchema);
+
+const Chat = exports.Chat = _mongoose2.default.model("chat", chatSchema);

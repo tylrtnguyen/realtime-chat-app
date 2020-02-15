@@ -7,6 +7,13 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/api/admin
+POST http://localhost:5000/api/chat
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNDc0YmY0MjY1ZGZiMzBiOTBhNGY1ZiIsImlhdCI6MTU4MTczMjEwNCwiZXhwIjoxNTgxNzM1NzA0fQ.S6HoGHH2J5xCzKxus7l546RIDm-62Vua93LyUCP1aaw
+
+{
+    "sender":"Thong Nguyen",
+    "receiver":"Steven Gerrard",
+    "message":"Hello, Idol. How are you?",
+    "room":"#Idol"
+}

@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Event = undefined;
 
 var _mongoose = require("mongoose");
 
@@ -32,4 +33,5 @@ const eventSchema = new Schema({
     require: true
   }
 });
-exports.default = _mongoose2.default.model("event", eventSchema);
+
+const Event = exports.Event = _mongoose2.default.model("event", eventSchema);

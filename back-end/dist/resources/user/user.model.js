@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.User = undefined;
 
 var _mongoose = require("mongoose");
 
@@ -33,4 +34,5 @@ const userSchema = new Schema({
     type: String
   }
 });
-exports.default = _mongoose2.default.model("user", userSchema);
+
+const User = exports.User = _mongoose2.default.model("user", userSchema);
