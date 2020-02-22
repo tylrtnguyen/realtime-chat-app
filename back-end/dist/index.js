@@ -28,6 +28,10 @@ var _db = require("./utils/db");
 
 var _db2 = _interopRequireDefault(_db);
 
+var _cors = require("cors");
+
+var _cors2 = _interopRequireDefault(_cors);
+
 var _auth = require("./utils/auth");
 
 var _admin = require("./resources/admin/admin.router");
@@ -58,7 +62,8 @@ app.use(_bodyParser2.default.urlencoded({
   extended: true
 }));
 app.use(_bodyParser2.default.json());
-app.use(_router2.default); // Authentication routes
+app.use(_router2.default);
+app.use((0, _cors2.default)()); // Authentication routes
 
 app.post('/register', _auth.register);
 app.post('/login', _auth.login); // API routes
@@ -75,6 +80,11 @@ const server = _http2.default.createServer(app); // SocketIO section
 const io = (0, _socket2.default)(server);
 io.on('connection', socket => {
   console.log('We have a new connection');
+  socket.on('chat message', function (msg) {
+    console.log('Message: ' + JSON.stringify(msg)); // Broadcast the message
+
+    io.emit('chat message', msg);
+  });
   socket.on('disconnect', () => {
     console.log('User had left!');
   });

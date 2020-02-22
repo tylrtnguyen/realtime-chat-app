@@ -12,9 +12,9 @@ const Register = () => {
     const [room, setRoom] = useState('')
 
     return (
-        <div class="container">
+        <div className="container">
             <Header />
-            <div class="LoginTabs">
+            <div className="LoginTabs">
             <LoginTabs />
             </div>
         </div>

@@ -10,6 +10,7 @@ const connect = (url = process.env.DB_URI, opts = {}) => {
     const connection = mongoose.connection;
 
     mongoose.set('useFindAndModify', false);
+    mongoose.set('useCreateIndex', true);
 
     connection.once('open', () => {
         console.log('MongoDB database connection established successfully');

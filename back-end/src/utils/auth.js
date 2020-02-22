@@ -23,7 +23,7 @@ export const newToken = admin => {
 export const verifyToken = token => {
     new Promise((resolve, reject) => {
         jwt.verify(token, process.env.TOKEN, (err, payload) => {
-            if(err) return reject(err);
+            if(err) return reject(err.name);
             resolve(payload)
         })
     })
@@ -64,20 +64,19 @@ export const register = async(req, res) => {
 
 export const login = async (req, res) => {
     const {error} = loginValidation(req.body)
-    if (error) return res.status(400).send(error.details)
+    if (error) res.status(400).send(error.details[0].message)
     
     // Check if the admin exists using email
     const adminData = req.body
     const admin = await Admin.findOne({email: adminData.email}).select('email password').exec()
-
     if(!admin){
-        return res.status(401).send("Email or password is invalid")
+        res.status(401).send("Email or password is invalid")
     }
 
     const passwordCorrect = await bcrypt.compare(adminData.password, admin.password)
 
     if (!passwordCorrect) {
-        return res.status(400).send("Invalid Credentials")
+        res.status(400).send("Invalid Credentials")
     }
 
     // Assign a new token
@@ -104,6 +103,7 @@ export const protect = async(req, res, next) => {
         payload = await verifyToken(token)
     }
     catch (error) {
+        console.log(error.name)
         res.status(401).send("Invalid token")
     }
 

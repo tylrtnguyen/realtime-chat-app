@@ -13,11 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const Schema = _mongoose2.default.Schema;
 const chatSchema = new Schema({
-  sender: {
-    type: String,
-    required: true
-  },
-  receiver: {
+  author: {
     type: String,
     required: true
   },

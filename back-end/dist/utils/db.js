@@ -23,6 +23,8 @@ const connect = (url = process.env.DB_URI, opts = {}) => {
 
   _mongoose2.default.set('useFindAndModify', false);
 
+  _mongoose2.default.set('useCreateIndex', true);
+
   connection.once('open', () => {
     console.log('MongoDB database connection established successfully');
   });

@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import router from './utils/router'
 import connect from './utils/db'
+import cors from 'cors'
 import { register, login, protect} from './utils/auth'
 import adminRouter from './resources/admin/admin.router'
 import chatRouter from './resources/chat/chat.router'
@@ -22,6 +23,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(router)
+app.use(cors())
 
 // Authentication routes
 app.post('/register', register);
@@ -43,6 +45,13 @@ const io = socketio(server);
 
 io.on('connection', (socket) => {
     console.log('We have a new connection');
+
+    socket.on('chat message', function(msg){
+      console.log('Message: ' + JSON.stringify(msg))
+      // Broadcast the message
+      io.emit('chat message', msg);
+    })
+
 
     socket.on('disconnect', () => {
         console.log('User had left!')

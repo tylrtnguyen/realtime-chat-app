@@ -5,10 +5,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'; 
 import Container from '@material-ui/core/Container';
-
-
+import { JoinValidate } from '../FormValidate/FormValidate'
+import axios from 'axios'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function AdminLogin() {
+export default function GuestLogin() {
   const [name, setName] = useState('');
 
   const classes = useStyles();
@@ -54,6 +54,8 @@ export default function AdminLogin() {
             id="name"
             label="Your Name Here"
             name="name"
+            value={name}
+            onChange = {e => setName(e.target.value)}
           />
           <Button 
             type="submit"
@@ -61,6 +63,7 @@ export default function AdminLogin() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={!JoinValidate(name)}
           >
             Join Our Chat
           </Button>
