@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles'; 
 import Container from '@material-ui/core/Container';
 import { JoinValidate } from '../FormValidate/FormValidate'
-import axios from 'axios'
+import { useHistory } from 'react-router-dom'
+import { GlobalContext } from '../../context/GlobalState'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -31,9 +32,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function GuestLogin() {
+  const history = useHistory()
   const [name, setName] = useState('');
+  const {setUser, sendUser } = useContext(GlobalContext)
+ 
 
   const classes = useStyles();
+
+  const handleJoin = async (event) => { 
+    sendUser({name})
+    setUser(name)
+    history.push('/chat')
+    // Prevent the page from reloading
+    event.preventDefault();
+}
 
   return (
     <Container component="main" maxWidth="xs">
@@ -45,7 +57,7 @@ export default function GuestLogin() {
         <Typography component="h1" variant="h5">
           Guest Join
         </Typography>
-        <form className={classes.form} noValidate>
+        <form method="POST" onSubmit={handleJoin} className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"

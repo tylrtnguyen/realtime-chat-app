@@ -9,8 +9,14 @@ var _mongoose = require("mongoose");
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _moment = require("moment");
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const moment = (0, _moment2.default)();
+const dateTime = moment.format('llll');
 const Schema = _mongoose2.default.Schema;
 const adminSchema = new Schema({
   name: {
@@ -30,8 +36,8 @@ const adminSchema = new Schema({
     min: 8
   },
   created_at: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: dateTime
   }
 });
 

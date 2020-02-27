@@ -12,7 +12,9 @@ var _express = require("express");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const router = (0, _express.Router)(); // /api/chat
+const router = (0, _express.Router)(); // /api/roomhistory/:roomname
+
+router.route('/:roomname').get(_chat2.default.getChatByRoom); // /api/chat
 
 router.route('/').get(_chat2.default.getAllItems).post(_chat2.default.addItem); // /api/chat/:id
 

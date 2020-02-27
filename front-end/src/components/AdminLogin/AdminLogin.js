@@ -17,13 +17,12 @@ import axios from 'axios'
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isAuthenticated, setAuthStatus] = useState(false)
   const history = useHistory()
   const classes = useStyles();
 
 
   const handleSubmit = (event) => {
-      axios.post("http://localhost:5000/login",
+      axios.post("/login",
       {
           email,
           password     
@@ -33,7 +32,6 @@ export default function AdminLogin() {
           localStorage.setItem('login',true)
           // Set token value
           localStorage.setItem('token',response.data.token)
-          setAuthStatus(true)
           history.push('/dashboard')
       }).catch(error => {
         console.log(error)

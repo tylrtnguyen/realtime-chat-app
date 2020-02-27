@@ -8,9 +8,7 @@ import LoginTabs from '../LoginTabs/LoginTabs'
 
 
 const Register = () => {
-    const [name, setName] = useState('')
-    const [room, setRoom] = useState('')
-
+    
     return (
         <div className="container">
             <Header />

@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Input from '@material-ui/core/Input';
 import { useStyles } from './UseStyles'
 import { MessageValidate } from '../FormValidate/FormValidate'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/Send';
-import { CTX } from '../Store/Store';
+import { GlobalContext } from '../../context/GlobalState';
 
 export default function Compose() {
     const classes = useStyles()
     const [message, setMessage] = useState("")
-    const {sendChatAction, user, getActiveRoom} = React.useContext(CTX)
+    const {activeRoom, sendChatAction, user} = useContext(GlobalContext)
 
     return (
         <div className={classes.compose}>
@@ -27,7 +27,7 @@ export default function Compose() {
                 color="primary"
                 disabled={!MessageValidate(message)}
                 onClick={() => {
-                    sendChatAction({author: user, message: message, room: getActiveRoom()})
+                    sendChatAction({author: user, message: message, room: activeRoom || "General" });
                     setMessage("")
                 }}>
                 <SendIcon></SendIcon>

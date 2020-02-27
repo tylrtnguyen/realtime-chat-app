@@ -7,13 +7,11 @@ import Register from './components/Register/Register';
 import Chat from './components/Chat/Chat';
 import Dashboard from './components/Dashboard/Dashboard'
 import NotFoundPage from './components/NotFoundPage/NotFoundPage'
-import Store from './components/Store/Store'
-
-
+import { GlobalProvider } from './context/GlobalState'
 
 
 const App = () => (
-    <Store>
+    <GlobalProvider>
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact component={Register}/>
@@ -22,7 +20,7 @@ const App = () => (
                 <Route path="*" component={NotFoundPage}/>
             </Switch>
         </BrowserRouter>
-    </Store>
+    </GlobalProvider>
 );
 
 export default App;

@@ -16,15 +16,12 @@ _dotenv2.default.config(); // Add useNewUrlParser and UnifiedTopolgy to prevent 
 const connect = (url = process.env.DB_URI, opts = {}) => {
   _mongoose2.default.connect(url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   });
 
   const connection = _mongoose2.default.connection;
-
-  _mongoose2.default.set('useFindAndModify', false);
-
-  _mongoose2.default.set('useCreateIndex', true);
-
   connection.once('open', () => {
     console.log('MongoDB database connection established successfully');
   });

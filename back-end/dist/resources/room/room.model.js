@@ -9,12 +9,14 @@ var _mongoose = require("mongoose");
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _user = require("../user/user.model");
+var _moment = require("moment");
 
-var _user2 = _interopRequireDefault(_user);
+var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const moment = (0, _moment2.default)();
+const dateTime = moment.format('llll');
 let Schema = _mongoose2.default.Schema;
 const roomSchema = new Schema({
   name: {
@@ -22,10 +24,9 @@ const roomSchema = new Schema({
     required: true,
     unique: true
   },
-  joined_user: [_user2.default],
   created_at: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: dateTime
   }
 });
 

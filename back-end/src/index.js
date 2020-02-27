@@ -6,11 +6,15 @@ import dotenv from 'dotenv'
 import router from './utils/router'
 import connect from './utils/db'
 import cors from 'cors'
+import colors from 'colors'
+import morgan from 'morgan'
 import { register, login, protect} from './utils/auth'
 import adminRouter from './resources/admin/admin.router'
 import chatRouter from './resources/chat/chat.router'
 import eventRouter from './resources/event/event.router'
 import userRouter from './resources/user/user.router'
+import roomRouter from './resources/room/room.router'
+import historyRouter from './resources/history/history.router'
 
 
 dotenv.config()
@@ -30,14 +34,22 @@ app.post('/register', register);
 app.post('/login', login);
 
 // API routes
-app.use('/api', protect);
 app.use('/api/user', userRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/event', eventRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/room', roomRouter);
+app.use('/api/auth', protect);
+app.use('/api/auth/admin', adminRouter);
+app.use('/api/auth/event', eventRouter);
+app.use('/api/auth/history', historyRouter);
+
+
 
 // Create server
 const server = http.createServer(app);
+
+if(process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 
 // SocketIO section
@@ -50,6 +62,12 @@ io.on('connection', (socket) => {
       console.log('Message: ' + JSON.stringify(msg))
       // Broadcast the message
       io.emit('chat message', msg);
+    })
+
+    socket.on('user joined', function(user) {
+      console.log('User: ' + JSON.stringify(user))
+      // Broadcast user
+      io.emit('user joined', user)
     })
 
 
@@ -65,7 +83,7 @@ const start = async () => {
     try {
       await connect()
       server.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`)
+        console.log(`Server is running on http://localhost:${port}`.cyan.bold)
       })
     } catch (e) {
       console.error(e)

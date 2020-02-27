@@ -1,5 +1,9 @@
 import mongoose from 'mongoose'
-import User from '../user/user.model'
+import Moment from 'moment'
+
+const moment = Moment()
+
+const dateTime = moment.format('llll')
 
 let Schema = mongoose.Schema
 
@@ -9,10 +13,9 @@ const roomSchema = new Schema({
         required: true,
         unique: true
     },
-    joined_user:[User],
     created_at: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: dateTime
     }
 })
 

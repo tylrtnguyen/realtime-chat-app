@@ -112,23 +112,13 @@ const login = exports.login = async (req, res) => {
 };
 
 const protect = exports.protect = async (req, res, next) => {
-  const bearer = req.headers.authorization;
-
-  if (!bearer || !bearer.startsWith('Bearer ')) {
-    res.status(401).send("Not authorized");
-  }
-
-  const token = bearer.split(' ')[1]; // Verify token
-
-  let payload;
-
   try {
-    payload = await verifyToken(token);
+    const token = req.headers.authorization.split(" ")[1];
+    const user = await verifyToken(token);
+    req.user = user;
+    next();
   } catch (error) {
     console.log(error.name);
-    res.status(401).send("Invalid token");
+    res.status(401).send("Authentication Failed");
   }
-
-  req.user = payload;
-  next();
 };

@@ -1,4 +1,9 @@
 import mongoose from 'mongoose'
+import Moment from 'moment'
+
+const moment = Moment()
+
+const dateTime = moment.format('llll')
 
 const Schema = mongoose.Schema
 
@@ -11,13 +16,13 @@ const chatSchema = new Schema({
         type: String,
         required: true
     },
-    date: {
-        type: Date,
-        default: Date.now
-    },
     room: {
         type: String,
         required: true
+    },
+    created_at: {
+        type: String,
+        default: dateTime
     }
 })
 

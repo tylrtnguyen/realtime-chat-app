@@ -15,7 +15,14 @@ var _os2 = _interopRequireDefault(_os);
 
 var _ip = require("../../utils/ip");
 
+var _moment = require("moment");
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const moment = (0, _moment2.default)();
+const dateTime = moment.format('llll');
 
 const networkInterfaces = _os2.default.networkInterfaces();
 
@@ -24,14 +31,15 @@ const ip = (0, _ip.getIP)(networkInterfaces);
 const userSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: [true, 'Please fill in your name']
   },
   joined_at: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: dateTime
   },
   ip: {
-    type: String
+    type: String,
+    default: ip
   }
 });
 

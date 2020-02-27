@@ -32,6 +32,14 @@ var _cors = require("cors");
 
 var _cors2 = _interopRequireDefault(_cors);
 
+var _colors = require("colors");
+
+var _colors2 = _interopRequireDefault(_colors);
+
+var _morgan = require("morgan");
+
+var _morgan2 = _interopRequireDefault(_morgan);
+
 var _auth = require("./utils/auth");
 
 var _admin = require("./resources/admin/admin.router");
@@ -49,6 +57,14 @@ var _event2 = _interopRequireDefault(_event);
 var _user = require("./resources/user/user.router");
 
 var _user2 = _interopRequireDefault(_user);
+
+var _room = require("./resources/room/room.router");
+
+var _room2 = _interopRequireDefault(_room);
+
+var _history = require("./resources/history/history.router");
+
+var _history2 = _interopRequireDefault(_history);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68,13 +84,19 @@ app.use((0, _cors2.default)()); // Authentication routes
 app.post('/register', _auth.register);
 app.post('/login', _auth.login); // API routes
 
-app.use('/api', _auth.protect);
 app.use('/api/user', _user2.default);
-app.use('/api/admin', _admin2.default);
-app.use('/api/event', _event2.default);
-app.use('/api/chat', _chat2.default); // Create server
+app.use('/api/chat', _chat2.default);
+app.use('/api/room', _room2.default);
+app.use('/api/auth', _auth.protect);
+app.use('/api/auth/admin', _admin2.default);
+app.use('/api/auth/event', _event2.default);
+app.use('/api/auth/history', _history2.default); // Create server
 
-const server = _http2.default.createServer(app); // SocketIO section
+const server = _http2.default.createServer(app);
+
+if (process.env.NODE_ENV === 'development') {
+  app.use((0, _morgan2.default)('dev'));
+} // SocketIO section
 
 
 const io = (0, _socket2.default)(server);
@@ -85,6 +107,11 @@ io.on('connection', socket => {
 
     io.emit('chat message', msg);
   });
+  socket.on('user joined', function (user) {
+    console.log('User: ' + JSON.stringify(user)); // Broadcast user
+
+    io.emit('user joined', user);
+  });
   socket.on('disconnect', () => {
     console.log('User had left!');
   });
@@ -94,7 +121,7 @@ const start = async () => {
   try {
     await (0, _db2.default)();
     server.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+      console.log(`Server is running on http://localhost:${port}`.cyan.bold);
     });
   } catch (e) {
     console.error(e);

@@ -16,5 +16,5 @@ const router = (0, _express.Router)(); // api/user/
 
 router.route('/').get(_user2.default.getAllItems).post(_user2.default.addItem); // api/user/:id
 
-router.route(':id').get(_user2.default.getOneItem).put(_user2.default.updateItem).delete(_user2.default.removeItem);
+router.route('/:id').get(_user2.default.getOneItem).put(_user2.default.updateItem).delete(_user2.default.removeItem);
 exports.default = router;

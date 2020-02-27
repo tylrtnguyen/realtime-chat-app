@@ -5,12 +5,15 @@ dotenv.config()
 
 // Add useNewUrlParser and UnifiedTopolgy to prevent warning
 const connect = (url = process.env.DB_URI, opts = {}) => {
-    mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology:true});
+    mongoose.connect(url, {
+        useNewUrlParser: true, 
+        useUnifiedTopology:true,
+        useCreateIndex: true,
+        useFindAndModify: false
+    });
 
     const connection = mongoose.connection;
 
-    mongoose.set('useFindAndModify', false);
-    mongoose.set('useCreateIndex', true);
 
     connection.once('open', () => {
         console.log('MongoDB database connection established successfully');

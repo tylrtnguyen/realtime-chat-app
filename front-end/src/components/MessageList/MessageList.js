@@ -1,120 +1,108 @@
-import React, {useState, useEffect} from 'react'
-import { MessageItem } from '../MessageItem/MessageItem'
+import React, {useState, useEffect, useContext} from 'react'
+import { Redirect } from 'react-router-dom'
 import moment from 'moment'
-
-import Compose from '../Compose/Compose'
+import Toolbar from "../Toolbar/Toolbar";
+import PersonIcon from "@material-ui/icons/Person";
+import Typography from "@material-ui/core/Typography";
+import Chip from "@material-ui/core/Chip";
+import FaceIcon from "@material-ui/icons/Face";
+import { MessageValidate } from '../FormValidate/FormValidate'
+import Button from '@material-ui/core/Button'
+import SendIcon from '@material-ui/icons/Send';
+import Input from '@material-ui/core/Input';
+import { GlobalContext } from '../../context/GlobalState' 
 import { useStyles } from './UseStyles'
 
 
 
-
-const MY_USER_ID = 'Thong Nguyen';
-
-
 export const MessageList = () => {
-    const [messages, setMessages] = useState([])
+    const {chats, activeRoom, sendChatAction, getChats, user, users, getUsers } = useContext(GlobalContext)
+    const [message, setMessage] = useState([])
+    const [ navigate, setNavigate ] =useState(false)
     const classes = useStyles()
 
     useEffect(() => {
-      getMessages()
+      getChats();
+      getUsers();
     }, [])
 
-
-    const getMessages = () => {
-      let tempMessages = [
-        {
-          author: 'Thong Nguyen',
-          message:'An com chua ban',
-          room:'#Angular'
-        },
-        {
-          author: 'Quang Pham',
-          message:'An roi',
-          room:'#Angular'
-        },
-        {
-          author: 'Thong Nguyen',
-          message:'An com co an rau khong ban',
-          room:'#Angular'
-        },
-        {
-          author: 'Thong Nguyen',
-          message:'Nho an nhieu rau chut nha',
-          room:'#Angular'
-        },
-        {
-          author: 'Quang Pham',
-          message:'Dang bi bon, an nhieu rau lam',
-          room:'#Angular'
-        }
-      ]
-      setMessages([...messages, ...tempMessages])
-    }
-    console.log(messages)
-
-    const renderMessages = (messages) => {
-      let i = 0;
-      let messageCount = messages.length
-      let tempMessages = [];
-
-      while (i < messageCount) {
-        let previous = messages[i - 1];
-        let current = messages[i];
-        let next = messages[i + 1];
-        let isMine = current.author === MY_USER_ID;
-        let currentMoment = moment(current.timestamp);
-        let prevBySameAuthor = false;
-        let nextBySameAuthor = false;
-        let startsSequence = true;
-        let endsSequence = true;
-        let showTimestamp = true;
-
-        if(previous) {
-          let previousMoment = moment(previous.timestamp);
-          let previousDuration = moment.duration(currentMoment.diff(previousMoment));
-          prevBySameAuthor = previous.author === current.author;
-
-          if (prevBySameAuthor && previousDuration.as('hours') < 1) {
-            startsSequence = false;
-          }
-
-          if (previousDuration.as('hours') < 1) {
-            showTimestamp = false;
-          }
-        }
-        if (next) {
-          let nextMoment = moment(next.timestamp);
-          let nextDuration = moment.duration(nextMoment.diff(currentMoment));
-          nextBySameAuthor = next.author === current.author;
-  
-          if (nextBySameAuthor && nextDuration.as('hours') < 1) {
-            endsSequence = false;
-          }
-        }
-
-        tempMessages.push(
-          <MessageItem
-            key={i}
-            isMine={isMine}
-            startsSequence={startsSequence}
-            endsSequence={endsSequence}
-            showTimestamp={showTimestamp}
-            data={current}
-          />
-        );
-        // Proceed to the next message.
-        i += 1;
-      }
-      console.log(tempMessages)
-      return tempMessages;
+    const handleLogout = () => {
+        setNavigate(true)
     }
 
+    if(navigate) {
+      return <Redirect to="/" push={true} />;
+    }
     return(
-      <div className="message-list">
-          <div className="message-list-container">
-            {renderMessages(messages)}
+      <div className={classes.root}>
+            <Toolbar
+              title={activeRoom}
+              rightItems={
+              [
+                <div>
+                <Typography key="user" variant="body1">Hello, {user}</Typography>
+                  <Button 
+                   key="buttonLogout"
+                   primary
+                   onClick={handleLogout}>
+                   Logout
+                   </Button>
+                </div>  
+              ]}
+              leftItems={[
+                <div>
+                  <Typography key="user_counts" variant="body1">
+                  <PersonIcon key="Icon"></PersonIcon>{users.length}
+                  </Typography>
+                </div>
+              ]}
+            />
+            <div className="message-list">
+              
+              {chats
+                .filter(chat => chat.room === activeRoom)
+                .map(chat => (
+                  <div className="message-list-container">
+                    <Chip
+                      icon={<FaceIcon />}
+                      key={chat.id}
+                      label={chat.author}
+                      variant="outlined"
+                    />
+                    <Typography
+                      className="inline"
+                      key={chat.id}
+                      variant="body1"
+                    >
+                      {chat.message}
+                    </Typography>
+                  </div>
+                ))}
+            </div>
+            <div className={classes.compose}>
+                <Input
+                  className={classes.composeInput}
+                  type="text"
+                  name="message"
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  placeholder="Type a message"
+                ></Input>
+                <div className={classes.button}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={!MessageValidate(message)}
+                    onClick={() => {
+                      sendChatAction({author: user, message: message, room: activeRoom || "General" });
+                      setMessage("");
+                    }}
+                  >
+                    <SendIcon></SendIcon>
+                    Send
+                  </Button>
+                </div>
+              </div>
           </div>
-          <Compose />
-      </div>
     );
 }

@@ -9,7 +9,7 @@ router.route('/')
       .post(controllers.addItem)
 
 // api/user/:id
-router.route(':id')
+router.route('/:id')
       .get(controllers.getOneItem)
       .put(controllers.updateItem)
       .delete(controllers.removeItem)

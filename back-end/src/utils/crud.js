@@ -9,11 +9,38 @@ export const getOneItem = model => async (req, res) => {
             res.status(400).end()
         }
         else {
-            res.status(200).json(item)
+            res.status(200).json({
+                success: true,
+                data: item
+            })
         }                 
     }
-    catch (error) {
-        console.log(error)
+    catch (err) {
+        console.log(err)
+        res.status(400).send('Failed to fetch item')
+    }
+}
+
+// Get Chat by roomname
+export const getChatByRoom= model => async (req, res) => {
+    let roomname = req.params.roomname
+    try {
+        const chats = await model.find({room: roomname})
+        .lean()
+        .exec()
+        if(!chats) {
+            res.status(400).send("Cannot find item")
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                count: chats.length,
+                data: chats
+            })
+        }                 
+    }
+    catch (err) {
+        console.log(err)
         res.status(400).send('Failed to fetch item')
     }
 }
@@ -27,23 +54,52 @@ export const getAllItems = model => async (req, res) => {
         if(!items) {
             res.status(400).end()
         }
-        res.status(200).json(items)
+        res.status(200).json({
+            success: true,
+            count: items.length,
+            data: items
+        })
     }
-    catch (error) {
-        console.log(error)
-        return res.status(400).send("Failed to fetch items")
+    catch (err) {
+        if(err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map(val => val.message);
+      
+            return res.status(400).json({
+              success: false,
+              error: messages
+            });
+          } else {
+            return res.status(500).json({
+              success: false,
+              error: 'Server Error'
+            });
+          }
     }
 }
 
 export const addItem = model => async (req, res) => {
-    let item_to_add = new model(req.body)
     try {
-        const item = await item_to_add.save()
-        res.status(201).json(item)
+        const item = await model.create(req.body)
+        res.status(201).json({
+            success: true,
+            data: item
+        })
     }
-    catch (error) {
-        console.log(error)
-        res.status(400).send("Failed to add new item")
+    catch (err) {
+        if(err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map(val => val.message);
+
+            return res.status(400).json({
+                success: false,
+                error: messages
+            })
+        }
+        else {
+            return res.status(500).json({
+                success: false,
+                error: 'Server Error'
+            });
+        }
     }
 }
 
@@ -56,12 +112,14 @@ export const updateItem = model => async (req, res) => {
             // Add item to database if item does not exist
             {new: true}
         ).lean()
-         .exec(item => {
-             if(!item) {
-                 return next(new Error("Could not load document"))
-             }
+         .exec()
+         if(!updatedItem){
+             return res.status(401).send("Not updated")
+         }
+         res.status(200).json({
+             success: true,
+             data: updatedItem
          })
-         res.status(200).json(updatedItem)
     }
     catch (error) {
         console.log(error)
@@ -74,7 +132,7 @@ export const updateItem = model => async (req, res) => {
 // findOneAndRemove()
 export const removeItem = model => async (req, res) => {
     try {
-        const removedItem = model.findOneAndRemove({_id:req.params.id})
+        const removedItem = model.findOneAndRemove({_id:req.params.id}).exec()
         if(!removedItem) {
             res.status(400).send("Failed to remove item")
         }
@@ -91,5 +149,6 @@ export const crudControllers = model => ({
     getAllItems: getAllItems(model),
     addItem: addItem(model),
     updateItem: updateItem(model),
-    removeItem: removeItem(model)
+    removeItem: removeItem(model),
+    getChatByRoom: getChatByRoom(model)
 })

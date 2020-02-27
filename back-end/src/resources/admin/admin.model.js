@@ -1,4 +1,9 @@
 import mongoose from 'mongoose'
+import Moment from 'moment'
+
+const moment = Moment()
+
+const dateTime = moment.format('llll')
 
 const Schema = mongoose.Schema
 
@@ -21,8 +26,8 @@ const adminSchema = new Schema(
             min: 8
         },
         created_at: {
-            type: Date,
-            default: Date.now
+            type: String,
+            default: dateTime
         }
     }
 )

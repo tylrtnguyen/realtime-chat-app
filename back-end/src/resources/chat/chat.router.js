@@ -3,6 +3,10 @@ import { Router } from 'express'
 
 const router = Router()
 
+// /api/roomhistory/:roomname
+router.route('/:roomname')
+      .get(controllers.getChatByRoom)
+
 // /api/chat
 router.route('/')
       .get(controllers.getAllItems)
@@ -13,5 +17,10 @@ router.route('/:id')
       .get(controllers.getOneItem)
       .put(controllers.updateItem)
       .delete(controllers.removeItem)
+
+     
+
+
+
 
 export default router
