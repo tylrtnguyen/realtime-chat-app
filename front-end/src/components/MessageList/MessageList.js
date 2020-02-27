@@ -30,6 +30,18 @@ export const MessageList = () => {
         setNavigate(true)
     }
 
+    const handleSendMessage = () => {
+        sendChatAction({author: user, message: message, room: activeRoom || "General" });
+        setMessage("");
+    }
+
+    const handleKeypress = (event) => {
+        if(event.keyCode === 13){
+          handleSendMessage()
+        }
+        event.preventDefault()
+    }
+
     if(navigate) {
       return <Redirect to="/" push={true} />;
     }
@@ -43,7 +55,8 @@ export const MessageList = () => {
                 <Typography key="user" variant="body1">Hello, {user}</Typography>
                   <Button 
                    key="buttonLogout"
-                   primary
+                   color="secondary"
+                   variant="contained"
                    onClick={handleLogout}>
                    Logout
                    </Button>
@@ -58,7 +71,7 @@ export const MessageList = () => {
               ]}
             />
             <div className="message-list">
-              
+              <Typography className={classes.textCenter} variant="h6">{moment().format('LLL')}</Typography>
               {chats
                 .filter(chat => chat.room === activeRoom)
                 .map(chat => (
@@ -83,19 +96,21 @@ export const MessageList = () => {
                 <Input
                   className={classes.composeInput}
                   type="text"
+                  id="inputMessage"
                   name="message"
                   value={message}
+                  onKeyUp={e => handleKeypress(e)}
                   onChange={e => setMessage(e.target.value)}
                   placeholder="Type a message"
                 ></Input>
                 <div className={classes.button}>
                   <Button
                     variant="contained"
+                    id="sendButton"
                     color="primary"
                     disabled={!MessageValidate(message)}
                     onClick={() => {
-                      sendChatAction({author: user, message: message, room: activeRoom || "General" });
-                      setMessage("");
+                      handleSendMessage()
                     }}
                   >
                     <SendIcon></SendIcon>

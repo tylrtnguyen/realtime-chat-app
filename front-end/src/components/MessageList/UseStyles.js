@@ -38,6 +38,9 @@ export const useStyles = makeStyles(theme => ({
       fontSize:'14px',
       float:'right'
   },
+  textCenter: {
+    textAlign: 'center'
+  }
   
   }));
 

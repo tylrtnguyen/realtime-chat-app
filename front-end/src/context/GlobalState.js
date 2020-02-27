@@ -10,8 +10,6 @@ const initialState = {
   chats:[],
   rooms:[],
   users:[],
-  events:[],
-  admins:[],
   active_room: 'General',
   error: null,
   loading: true,
@@ -35,11 +33,11 @@ const sendUser = (user) => {
     socket.emit('user joined', user)
 }
 
-const sendRoom = (room='General') => {
+const joinRoom = (room='General') => {
   socket.emit('join room', room)
 }
 
-const changeActiveRoom = (room) => {
+const leaveRoom = (room) => {
     socket.emit('leave room', room)
 }
 
@@ -62,16 +60,13 @@ export const GlobalProvider = ({children}) => {
       socket.on('user joined', function(user){
         console.log(user)
           addUser(user)
-          addEvent()
       })
 
       socket.on('join room', function(room) {
         console.log(room)
-          addEvent()
       })
 
       socket.on('leave room', function(room) {
-          addEvent()
       })
   }   
 
