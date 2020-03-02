@@ -21,9 +21,6 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const moment = (0, _moment2.default)();
-const dateTime = moment.format('llll');
-
 const networkInterfaces = _os2.default.networkInterfaces();
 
 const Schema = _mongoose2.default.Schema;
@@ -35,7 +32,7 @@ const userSchema = new Schema({
   },
   joined_at: {
     type: String,
-    default: dateTime
+    default: (0, _moment2.default)().format('llll')
   },
   ip: {
     type: String,

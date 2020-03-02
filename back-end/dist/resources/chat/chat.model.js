@@ -15,8 +15,6 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const moment = (0, _moment2.default)();
-const dateTime = moment.format('llll');
 const Schema = _mongoose2.default.Schema;
 const chatSchema = new Schema({
   author: {
@@ -33,7 +31,7 @@ const chatSchema = new Schema({
   },
   created_at: {
     type: String,
-    default: dateTime
+    default: (0, _moment2.default)().format('llll')
   }
 });
 

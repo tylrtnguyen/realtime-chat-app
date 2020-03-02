@@ -3,16 +3,18 @@ import { Router } from 'express'
 
 const router = Router()
 
-// api/event
+// /api/room
 router.route('/')
       .get(controllers.getAllItems)
       .post(controllers.addItem)
 
 
-// api/event/:id
+// /api/room/:id
 router.route('/:id')
       .get(controllers.getOneItem)
       .put(controllers.updateItem)
       .delete(controllers.removeItem)
+
+
 
 export default router

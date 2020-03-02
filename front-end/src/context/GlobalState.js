@@ -50,7 +50,6 @@ export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState)
     const token = localStorage.getItem('token')
 
-
     // Socket.io client implementation    
     if(!socket){    
       socket = io(":5000")
@@ -217,7 +216,7 @@ export const GlobalProvider = ({children}) => {
               'Authorization': `Bearer ${token}`
             }
         }
-
+        console.log(token)
         try {
             const res = await axios.post('/api/chat', chat, config);
 

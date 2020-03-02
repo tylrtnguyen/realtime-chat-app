@@ -1,11 +1,8 @@
 import mongoose from 'mongoose'
 import os from 'os'
 import { getIP } from '../../utils/ip'
-import Moment from 'moment'
+import moment from 'moment'
 
-const moment = Moment()
-
-const dateTime = moment.format('llll')
 
 
 const networkInterfaces = os.networkInterfaces();
@@ -19,7 +16,7 @@ const userSchema = new Schema({
     },
     joined_at: {
         type: String,
-        default: dateTime
+        default: moment().format('llll')
     }, 
     ip:{
         type: String,

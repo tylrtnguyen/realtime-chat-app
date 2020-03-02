@@ -82,15 +82,16 @@ app.use(_router2.default);
 app.use((0, _cors2.default)()); // Authentication routes
 
 app.post('/register', _auth.register);
-app.post('/login', _auth.login); // API routes
+app.post('/login', _auth.login);
+app.post('/join', _auth.join); // API routes
 
+app.use('/api', _auth.protect);
 app.use('/api/user', _user2.default);
 app.use('/api/chat', _chat2.default);
 app.use('/api/room', _room2.default);
-app.use('/api/auth', _auth.protect);
-app.use('/api/auth/admin', _admin2.default);
-app.use('/api/auth/event', _event2.default);
-app.use('/api/auth/history', _history2.default); // Create server
+app.use('/api/admin', _admin2.default);
+app.use('/api/eventlog', _event2.default);
+app.use('/api/history', _history2.default); // Create server
 
 const server = _http2.default.createServer(app);
 
@@ -103,16 +104,37 @@ const io = (0, _socket2.default)(server);
 io.on('connection', socket => {
   console.log('We have a new connection');
   socket.on('chat message', function (msg) {
-    console.log('Message: ' + JSON.stringify(msg)); // Broadcast the message
+    // Broadcast the message
+    io.in(msg.room).emit('chat message', msg);
+  }); // User join the app
 
-    io.emit('chat message', msg);
-  });
   socket.on('user joined', function (user) {
     console.log('User: ' + JSON.stringify(user)); // Broadcast user
 
     io.emit('user joined', user);
+  }); // Join room
+
+  socket.on('join room', function (joinRoomEvent) {
+    const {
+      room
+    } = joinRoomEvent;
+    console.log('Join Room: ' + JSON.stringify(joinRoomEvent));
+    socket.join(joinRoomEvent.room);
+    io.in(room).emit('join room', joinRoomEvent);
+  }); // Leave room
+
+  socket.on('leave room', function (leaveRoomEvent) {
+    const {
+      room
+    } = leaveRoomEvent;
+    console.log('Leave Room: ' + JSON.stringify(leaveRoomEvent));
+    io.in(room).emit('leave room', leaveRoomEvent);
+    socket.leave(leaveRoomEvent.room);
   });
-  socket.on('disconnect', () => {
+  socket.on('user left', function (user) {
+    io.emit('user left', user);
+  });
+  socket.on('disconnect', function () {
     console.log('User had left!');
   });
 });

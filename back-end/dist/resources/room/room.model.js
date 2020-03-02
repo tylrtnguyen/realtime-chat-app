@@ -15,9 +15,7 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const moment = (0, _moment2.default)();
-const dateTime = moment.format('llll');
-let Schema = _mongoose2.default.Schema;
+const Schema = _mongoose2.default.Schema;
 const roomSchema = new Schema({
   name: {
     type: String,
@@ -26,7 +24,7 @@ const roomSchema = new Schema({
   },
   created_at: {
     type: String,
-    default: dateTime
+    default: (0, _moment2.default)().format('llll')
   }
 });
 

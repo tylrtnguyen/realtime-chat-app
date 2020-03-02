@@ -25,11 +25,8 @@ export const MessageList = () => {
 
     useEffect(() => {
       const token = localStorage.getItem('token')
-      const fetchData = async (token) => {
-        await getChats(token)
-        await getUsers(token)
-      }
-      fetchData(token)
+      getChats(token)
+      getUsers(token)
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -80,21 +77,21 @@ export const MessageList = () => {
                 </div>
               ]}
             />
+            <Typography className={classes.textCenter} variant="h6">{moment().format('LLL')}</Typography>
             <div className="message-list">
-              <Typography className={classes.textCenter} variant="h6">{moment().format('LLL')}</Typography>
               {chats
                 .filter(chat => chat.room === activeRoom)
                 .map(chat => (
-                  <div key={chat.id} className="message-list-container">
+                  <div key={chat._id} className="message-list-container">
                     <Chip
                       icon={<FaceIcon />}
-                      key={chat.id}
+                      key="icon"
                       label={chat.author}
                       variant="outlined"
                     />
                     <Typography
                       className="inline"
-                      key={chat.id}
+                      key="message"
                       variant="body1"
                     >
                       {chat.message}

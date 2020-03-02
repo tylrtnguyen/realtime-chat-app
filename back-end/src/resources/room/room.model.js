@@ -1,11 +1,9 @@
 import mongoose from 'mongoose'
-import Moment from 'moment'
+import moment from 'moment'
 
-const moment = Moment()
 
-const dateTime = moment.format('llll')
 
-let Schema = mongoose.Schema
+const Schema = mongoose.Schema
 
 const roomSchema = new Schema({
     name: {
@@ -15,7 +13,7 @@ const roomSchema = new Schema({
     },
     created_at: {
         type: String,
-        default: dateTime
+        default: moment().format('llll')
     }
 })
 

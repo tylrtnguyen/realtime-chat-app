@@ -19,12 +19,8 @@ export const RoomList = () => {
   
   // Get rooms from the global state
   useEffect(() => {
-    joinRoom(currentRoom)
     const token = localStorage.getItem('token')
-    const fetchRoom = async (token) => {
-      await getRooms(token)
-    }
-    fetchRoom(token)
+    getRooms(token)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
