@@ -13,6 +13,6 @@ install:
 script:
     - npm run build
 deploy:
-    - provider: front-end/script
-    - script: bash front-end/script/deploy.sh
+    - provider: script
+    - script: bash script/deploy.sh
     - skip_cleanup: true
