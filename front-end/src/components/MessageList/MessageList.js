@@ -17,7 +17,7 @@ import { useStyles } from './UseStyles'
 
 export const MessageList = () => {
     const {chats, activeRoom, sendChatAction, sendUserLeft, 
-            getChats, user, users, getUsers } = useContext(GlobalContext)
+            getChats, user, users, getUsers} = useContext(GlobalContext)
     const [message, setMessage] = useState([])
     const [ navigate, setNavigate ] =useState(false)
     const classes = useStyles()

@@ -50,6 +50,7 @@ export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState)
     const token = localStorage.getItem('token')
     const SERVER = "https://api-chat-react.herokuapp.com";
+    
 
     // Socket.io client implementation    
     if(!socket){    
@@ -217,7 +218,6 @@ export const GlobalProvider = ({children}) => {
               'Authorization': `Bearer ${token}`
             }
         }
-        console.log(token)
         try {
             const res = await axios.post(`${SERVER}/api/chat`, chat, config);
 
@@ -244,11 +244,7 @@ export const GlobalProvider = ({children}) => {
 
       try {
           const res = await axios.post(`${SERVER}/join`, user, config);
-          // Set token value
           localStorage.setItem('token', res.data.token)
-          // Set login status
-          localStorage.setItem('login', true)
-
           dispatch({
             type: 'ADD_USER',
             payload: res.data.data
@@ -272,6 +268,7 @@ export const GlobalProvider = ({children}) => {
             users: state.users,
             events: state.events,
             loading: state.loading,
+            token: state.token, 
             /* Socket methods*/
             sendChatAction,
             sendUser,
