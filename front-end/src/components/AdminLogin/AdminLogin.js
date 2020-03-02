@@ -29,7 +29,7 @@ export default function AdminLogin() {
       }).then(response => {
           console.log(response)
           // Set login status
-          localStorage.setItem('login',true)
+          localStorage.setItem('role',response.data.role)
           // Set token value
           localStorage.setItem('token',response.data.token)
           history.push('/dashboard')

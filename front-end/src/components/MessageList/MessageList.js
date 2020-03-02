@@ -16,18 +16,28 @@ import { useStyles } from './UseStyles'
 
 
 export const MessageList = () => {
-    const {chats, activeRoom, sendChatAction, getChats, user, users, getUsers } = useContext(GlobalContext)
+    const {chats, activeRoom, sendChatAction, sendUserLeft, 
+            getChats, user, users, getUsers } = useContext(GlobalContext)
     const [message, setMessage] = useState([])
     const [ navigate, setNavigate ] =useState(false)
     const classes = useStyles()
+    
 
     useEffect(() => {
-      getChats();
-      getUsers();
+      const token = localStorage.getItem('token')
+      const fetchData = async (token) => {
+        await getChats(token)
+        await getUsers(token)
+      }
+      fetchData(token)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleLogout = () => {
-        setNavigate(true)
+      sendUserLeft(user)
+      localStorage.removeItem('login')
+      localStorage.removeItem('token')
+      setNavigate(true)
     }
 
     const handleSendMessage = () => {
@@ -56,7 +66,7 @@ export const MessageList = () => {
                   <Button 
                    key="buttonLogout"
                    color="secondary"
-                   variant="contained"
+                   variant="outlined"
                    onClick={handleLogout}>
                    Logout
                    </Button>
@@ -75,7 +85,7 @@ export const MessageList = () => {
               {chats
                 .filter(chat => chat.room === activeRoom)
                 .map(chat => (
-                  <div className="message-list-container">
+                  <div key={chat.id} className="message-list-container">
                     <Chip
                       icon={<FaceIcon />}
                       key={chat.id}

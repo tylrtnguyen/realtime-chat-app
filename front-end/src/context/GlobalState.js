@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState, useEffect} from 'react'
+import React, { createContext, useReducer, useState} from 'react'
 import AppReducer from './AppReducer'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -10,10 +10,10 @@ const initialState = {
   chats:[],
   rooms:[],
   users:[],
-  active_room: 'General',
+  events:[],
   error: null,
   loading: true,
-  user:''
+  loginStatus: null
 }
 
 
@@ -21,24 +21,24 @@ let socket;
 
 
 // Send Chat to server
-const sendChatAction = (value) => {
-    socket.emit('chat message', value)
-}
-
-const sendEvent = (event) => {
-    socket.emit('send event', event)
+const sendChatAction = (chatMessage) => {
+    socket.emit('chat message', chatMessage)
 }
 
 const sendUser = (user) => {
     socket.emit('user joined', user)
 }
 
-const joinRoom = (room='General') => {
-  socket.emit('join room', room)
+const sendUserLeft = (user) => {
+  socket.emit('user left', user)
 }
 
-const leaveRoom = (room) => {
-    socket.emit('leave room', room)
+const joinRoom = (joinRoomEvent) => {
+  socket.emit('join room', joinRoomEvent)
+}
+
+const leaveRoom = (leaveRoomEvent) => {
+    socket.emit('leave room', leaveRoomEvent)
 }
 
 // Create context
@@ -48,33 +48,90 @@ export const GlobalProvider = ({children}) => {
     const [user, setUser] = useState('')
     const [activeRoom, changeActiveRoom ] = useState('General')
     const [state, dispatch] = useReducer(AppReducer, initialState)
+    const token = localStorage.getItem('token')
 
 
     // Socket.io client implementation    
     if(!socket){    
       socket = io(":5000")
       socket.on('chat message', function(msg) {
-          addChat(msg)
+          console.log(msg)
+          addChat(msg, token)
       })
       
-      socket.on('user joined', function(user){
-        console.log(user)
-          addUser(user)
+      socket.on('user joined', function(joinedUser){
+        const { name } = joinedUser
+        const event = {
+            type:"User Join",
+            user: name,
+            source: "Guest Join"
+        }
+        addEvent(event, token)
+        addUser(joinedUser)
+         
       })
 
-      socket.on('join room', function(room) {
-        console.log(room)
+      socket.on('join room', function(joinRoomEvent) {
+        const { user, room} = joinRoomEvent
+
+        if(user) {
+          const event = {
+            type: "Join Room",
+            user: user,
+            source: room
+          }
+          addEvent(event, token)
+        }
       })
 
-      socket.on('leave room', function(room) {
+      socket.on('leave room', function(leaveRoomEvent) {
+        const { user, room } = leaveRoomEvent
+        if(user){
+          const event = {
+            type: "Leave Room",
+            user: user,
+            source: room
+          }
+          addEvent(event, token)
+        }
+      })
+
+      socket.on('user left', function(user) {
+          const event = {
+            type:"User Left",
+            user: user,
+            source: "Main Page"
+          }
+          addEvent(event, token)
       })
   }   
 
+  // Add Event
+  const addEvent = async (event, token) => {
+    const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+    }
+    try {
+        await axios.post('/api/eventlog', event, config);
+    }
+    catch (err) {
+        console.log(err.response.data.error)
+    }
+}
+
 
     // Get all chats from the DB
-    const getChats = async () => {
+    const getChats = async (token) => {
+        const config = {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
         try {
-          const res = await axios.get('/api/chat');
+          const res = await axios.get('/api/chat', config);
             
           dispatch({
             type: 'GET_CHATS',
@@ -88,9 +145,14 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
-    const getUsers = async () => {
+    const getUsers = async (token) => {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
       try {
-        const res = await axios.get('/api/user');
+        const res = await axios.get('/api/user', config);
           
         dispatch({
           type: 'GET_USERS',
@@ -104,10 +166,36 @@ export const GlobalProvider = ({children}) => {
       }
   }
 
+  const getEvents = async (token) => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    try {
+      const res = await axios.get('/api/eventlog', config);
+        
+      dispatch({
+        type: 'GET_EVENTS',
+        payload: res.data.data
+      });
+    } catch (err) {
+      dispatch({
+        type: 'EVENT_ERROR',
+        payload: err.response.data.error
+      });
+    }
+}
+
     // Get all rooms from the DB
-    const getRooms = async () => {
+    const getRooms = async (token) => {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
         try {
-          const res = await axios.get('/api/room');
+          const res = await axios.get('/api/room', config);
     
           dispatch({
             type: 'GET_ROOMS',
@@ -121,14 +209,12 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
-    // const changeRoom = async () => {
-    // }
-
     // Add new chat to the DB
-    const addChat = async (chat) => {
+    const addChat = async (chat, token) => {
         const config = {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
             }
         }
 
@@ -157,7 +243,12 @@ export const GlobalProvider = ({children}) => {
       }
 
       try {
-          const res = await axios.post('/api/user', user, config);
+          const res = await axios.post('/join', user, config);
+
+          // Set token value
+          localStorage.setItem('token', res.data.token)
+          // Set login status
+          localStorage.setItem('login', true)
 
           dispatch({
             type: 'ADD_USER',
@@ -180,21 +271,25 @@ export const GlobalProvider = ({children}) => {
             rooms: state.rooms,
             error: state.error,
             users: state.users,
+            events: state.events,
             loading: state.loading,
             /* Socket methods*/
             sendChatAction,
-            sendEvent,
             sendUser,
+            sendUserLeft,
             /* user getter and setter */
             user,
             setUser,
             activeRoom,
             changeActiveRoom,
+            joinRoom,
+            leaveRoom,
             addChat,
             /* Get list of items */
             getUsers,
             getChats,
-            getRooms
+            getRooms,
+            getEvents
             }}>
             {children}
         </GlobalContext.Provider>

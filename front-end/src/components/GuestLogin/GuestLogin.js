@@ -39,8 +39,8 @@ export default function GuestLogin() {
 
   const classes = useStyles();
 
-  const handleJoin = async (event) => { 
-    sendUser({name})
+  const handleJoin = (event) => { 
+    sendUser({ name })
     setUser(name)
     history.push('/chat')
     // Prevent the page from reloading

@@ -18,10 +18,11 @@ export default (state, action) => {
                 loading: false,
                 users: action.payload
             }
-        case 'CHANGE_ROOM':
+        case 'GET_EVENTS':
             return {
                 ...state,
-                active_room: action.payload
+                loading: false,
+                events: action.payload
             }
         case 'ADD_CHAT':
             return {
@@ -29,6 +30,11 @@ export default (state, action) => {
             chats: [...state.chats, action.payload]
         }
         case 'CHAT_ERROR':
+            return {
+                ...state,
+                error: action.payload
+            }
+        case 'ROOM_ERROR':
             return {
                 ...state,
                 error: action.payload
@@ -41,7 +47,12 @@ export default (state, action) => {
         case 'ADD_USER':
             return {
                 ...state,
-                users: action.payload
+                loginStatus: action.payload
+            }
+        case 'EVENT_ERROR':
+            return {
+                ...state,
+                error: action.payload
             }
         default:
             return state

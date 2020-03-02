@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+// To be developed in the future
 
 export default function AddRoomDialog() {
     const [open, setOpen] = React.useState(false)

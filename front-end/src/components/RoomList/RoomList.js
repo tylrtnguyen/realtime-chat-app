@@ -7,34 +7,53 @@ import { useStyles } from "./UseStyles";
 import Typography from "@material-ui/core/Typography";
 import { GlobalContext } from "../../context/GlobalState"
 import Divider from '@material-ui/core/Divider'
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer'
 
 
 export const RoomList = () => {
   const classes = useStyles();
-  const {changeActiveRoom, rooms, getRooms } = useContext(GlobalContext)
+  const {user, changeActiveRoom, rooms, getRooms, joinRoom, leaveRoom } = useContext(GlobalContext)
+  const [currentRoom, setCurrentRoom] = useState('General')
+  
+
   
   // Get rooms from the global state
   useEffect(() => {
-    getRooms()
+    joinRoom(currentRoom)
+    const token = localStorage.getItem('token')
+    const fetchRoom = async (token) => {
+      await getRooms(token)
+    }
+    fetchRoom(token)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleListItemClick = room => {
-    changeActiveRoom(room);
+    // Local State
+    if(currentRoom !== room ){
+      leaveRoom(
+        {
+        user: user,
+        room: currentRoom
+        }
+      )
+      setCurrentRoom(room)
+      // Global State
+      joinRoom(
+        {
+          user: user,
+          room: room
+        }
+      )
+      changeActiveRoom(room)
+    }
   };
   
 
-  return (
-     <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        anchor="left"
-      >
-        <List className={classes.root}>
+  const drawerContent = (
+    <div className={classes.root}>
+      <Divider />
+      <List>
       <ListItem>
         <Typography variant="h5">Chat Rooms</Typography>
       </ListItem>
@@ -47,19 +66,33 @@ export const RoomList = () => {
           alignItems="flex-start"
           key={room.name}
           button
-          onClick={e => handleListItemClick(e.target.innerText)}
+          onClick={e => {
+            handleListItemClick(e.target.innerText)        
+          }}
         >
           <ListItemText
             variant="body2"
-            primary
             color={classes.color}
             className={classes.inline}
             primary={room.name}
           />
         </ListItem>
         ))}
-    </List>
-    </Drawer>
-   
+      </List>
+      </div>
+  )
+  return (
+    <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        anchor="left"
+      >
+        {drawerContent}
+    </Drawer>  
   );
 };
+
+

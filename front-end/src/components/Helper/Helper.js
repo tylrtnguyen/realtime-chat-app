@@ -5,6 +5,10 @@ export const getLoginStatus = () => {
     return localStorage.getItem('login')
 }
 
+export const checkAuthorization = () => {
+    return localStorage.getItem('role') === 'admin'
+}
+
 export const getToken = () => {
     return localStorage.getItem('token')
 }
@@ -16,19 +20,33 @@ export const getActiveRoom = (roomName) => {
 export const getAdmins = async (token) => {
     const config = {
         headers: {
-          'Authorization': `Bearer ${token}`
+            'Content-Type': 'Application/json',
+            'Authorization': `Bearer ${token}`
         }
     }
-    const admins = await axios.get('/api/auth/admin', config)
-    return admins
+    try {
+        const admins = await axios.get('/api/admin', config)
+        return admins
+    }
+    catch (err) {
+        return err.name
+    }
 }
 
 export const getEvents = async (token) => {
     const config = {
         headers: {
-          'Authorization': `Bearer ${token}`
+            'Content-Type': 'Application/json',
+            'Authorization': `Bearer ${token}`
         }
     }
-    const events = await axios.get('/api/auth/event', config)
-    return events
+    try {
+        const events = await axios.get('/api/eventlog', config)
+        return events
+    }
+    catch (err) {
+        return err.name
+    }
 }
+
+

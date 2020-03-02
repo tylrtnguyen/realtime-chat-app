@@ -10,12 +10,7 @@ import Unauthorized from '../Unauthorized/Unauthorized'
 const Chat = () => {  
   const { user } = useContext(GlobalContext)
 
-  if (!user){
-    return (
-      <Unauthorized />
-    );
-  }
-  else {
+  if (user){
     return (
       <div className="container">
         <Grid container spacing={3}>
@@ -28,6 +23,12 @@ const Chat = () => {
         </Grid>
       </div>
     )
+    
+  }
+  else {
+    return (
+      <Unauthorized />
+    );
   }
   
 };
