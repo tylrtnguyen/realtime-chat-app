@@ -91,7 +91,10 @@ app.use('/api/chat', _chat2.default);
 app.use('/api/room', _room2.default);
 app.use('/api/admin', _admin2.default);
 app.use('/api/eventlog', _event2.default);
-app.use('/api/history', _history2.default); // Create server
+app.use('/api/history', _history2.default);
+app.get('/', (req, res) => {
+  res.send("API is working!");
+}); // Create server
 
 const server = _http2.default.createServer(app);
 

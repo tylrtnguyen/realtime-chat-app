@@ -20,7 +20,7 @@ export default function StaticToolbar(props) {
         const handleDrawerClose = () => {
             setOpen(false);
         };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
 
     const handleLogOut= () => {
       setNavigate(true)

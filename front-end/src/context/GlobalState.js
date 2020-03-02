@@ -49,10 +49,11 @@ export const GlobalProvider = ({children}) => {
     const [activeRoom, changeActiveRoom ] = useState('General')
     const [state, dispatch] = useReducer(AppReducer, initialState)
     const token = localStorage.getItem('token')
+    const SERVER = "https://api-chat-react.herokuapp.com";
 
     // Socket.io client implementation    
     if(!socket){    
-      socket = io(":5000")
+      socket = io(`${SERVER}/`)
       socket.on('chat message', function(msg) {
           console.log(msg)
           addChat(msg, token)
@@ -114,7 +115,7 @@ export const GlobalProvider = ({children}) => {
         }
     }
     try {
-        await axios.post('/api/eventlog', event, config);
+        await axios.post(`${SERVER}/api/eventlog`, event, config);
     }
     catch (err) {
         console.log(err.response.data.error)
@@ -130,7 +131,7 @@ export const GlobalProvider = ({children}) => {
           }
         }
         try {
-          const res = await axios.get('/api/chat', config);
+          const res = await axios.get(`${SERVER}/api/chat`, config);
             
           dispatch({
             type: 'GET_CHATS',
@@ -151,7 +152,7 @@ export const GlobalProvider = ({children}) => {
         }
       }
       try {
-        const res = await axios.get('/api/user', config);
+        const res = await axios.get(`${SERVER}/api/user`, config);
           
         dispatch({
           type: 'GET_USERS',
@@ -172,7 +173,7 @@ export const GlobalProvider = ({children}) => {
       }
     }
     try {
-      const res = await axios.get('/api/eventlog', config);
+      const res = await axios.get(`${SERVER}/api/eventlog`, config);
         
       dispatch({
         type: 'GET_EVENTS',
@@ -194,7 +195,7 @@ export const GlobalProvider = ({children}) => {
         }
       }
         try {
-          const res = await axios.get('/api/room', config);
+          const res = await axios.get(`${SERVER}/api/room`, config);
     
           dispatch({
             type: 'GET_ROOMS',
@@ -218,7 +219,7 @@ export const GlobalProvider = ({children}) => {
         }
         console.log(token)
         try {
-            const res = await axios.post('/api/chat', chat, config);
+            const res = await axios.post(`${SERVER}/api/chat`, chat, config);
 
             dispatch({
               type: 'ADD_CHAT',
@@ -242,8 +243,7 @@ export const GlobalProvider = ({children}) => {
       }
 
       try {
-          const res = await axios.post('/join', user, config);
-
+          const res = await axios.post(`${SERVER}/join`, user, config);
           // Set token value
           localStorage.setItem('token', res.data.token)
           // Set login status

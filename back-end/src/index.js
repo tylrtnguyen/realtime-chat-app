@@ -43,6 +43,10 @@ app.use('/api/admin', adminRouter);
 app.use('/api/eventlog', eventRouter);
 app.use('/api/history', historyRouter);
 
+app.get('/', (req, res) => {
+  res.send("API is working!")
+})
+
 
 
 // Create server

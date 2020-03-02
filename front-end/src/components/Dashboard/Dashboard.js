@@ -5,7 +5,7 @@ import {  Box, Typography, Container, Grid, Paper,Link } from '@material-ui/core
 import Total from './SubComponents/Total'
 import { UseStyles } from './UseStyles'
 import { GlobalContext } from '../../context/GlobalState'
-import { getAdmins, getEvents, getToken, checkAuthorization } from '../Helper/Helper'
+import { getToken, checkAuthorization } from '../Helper/Helper'
 import StaticToolbar from './StaticToolbar'
 
 

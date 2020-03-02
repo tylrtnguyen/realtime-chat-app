@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+    - "stable"
+cache:
+    directories:
+        - node_modules
+before_install:
+    - cd front-end
+    - "npm config set spin false"
+    - npm i -g now
+install:
+    - npm install
+script:
+    - npm run build
+deploy:
+    - provider: script
+    - script: bash script/deploy.sh
+    - skip_cleanup: true

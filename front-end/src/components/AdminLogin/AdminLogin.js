@@ -19,15 +19,15 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const history = useHistory()
   const classes = useStyles();
+  const SERVER = "https://api-chat-react.herokuapp.com"
 
 
   const handleSubmit = (event) => {
-      axios.post("/login",
+      axios.post(`${SERVER}/login`,
       {
           email,
           password     
       }).then(response => {
-          console.log(response)
           // Set login status
           localStorage.setItem('role',response.data.role)
           // Set token value

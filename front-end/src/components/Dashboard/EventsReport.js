@@ -16,6 +16,7 @@ export default function EventsReport() {
         }
         const token = localStorage.getItem('token')
         fetchEvent(token)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 

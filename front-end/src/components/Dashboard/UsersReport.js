@@ -15,6 +15,7 @@ export default function UsersReport() {
         }
         const token = localStorage.getItem('token')
         fetchUser(token)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

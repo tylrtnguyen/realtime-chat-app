@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "client-install": "npm install --prefix ../front-end",
     "build": "babel src --out-dir dist",
-    "server": "nodemon dist/index.js",
+    "server": "node dist/index.js",
     "client": "npm start --prefix ../front-end",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"

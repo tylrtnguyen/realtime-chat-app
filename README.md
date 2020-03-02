@@ -1,1 +1,2 @@
-## Realtime Chat App with Node.js and React.js
+## Realtime Chat App using MERN Stack
+
