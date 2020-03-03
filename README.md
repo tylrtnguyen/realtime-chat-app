@@ -2,5 +2,5 @@
 ## Realtime Chat App using MERN Stack
 ## Author: Thong Nguyen
 #### For admin login, please use the credential below:
-Email: admin@devconnect.com
-Password: admin2020
+#### Email: admin@devconnect.com
+#### Password: admin2020
