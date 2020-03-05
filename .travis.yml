@@ -7,7 +7,6 @@ cache:
 before_install:
     - cd front-end
     - "npm config set spin false"
-    - npm i -g now
 install:
     - npm install
 script:

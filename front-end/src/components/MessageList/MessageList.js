@@ -12,7 +12,7 @@ import SendIcon from '@material-ui/icons/Send';
 import Input from '@material-ui/core/Input';
 import { GlobalContext } from '../../context/GlobalState' 
 import { useStyles } from './UseStyles'
-import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom'
+// import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom'
 
 
 
