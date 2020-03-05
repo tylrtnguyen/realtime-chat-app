@@ -36,8 +36,7 @@ export default function GuestLogin() {
   const history = useHistory()
   const [name, setName] = useState('');
   const {setUser, sendUser, setToken} = useContext(GlobalContext)
-  // const SERVER = "https://api-chat-react.herokuapp.com"
-  const SERVER = "http://localhost:5000"
+  const SERVER = "https://api-chat-react.herokuapp.com"
  
 
   const classes = useStyles();
