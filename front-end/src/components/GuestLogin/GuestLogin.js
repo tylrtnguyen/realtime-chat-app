@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import axios from "axios"
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles'; 
 import Container from '@material-ui/core/Container';
@@ -34,20 +35,32 @@ const useStyles = makeStyles(theme => ({
 export default function GuestLogin() {
   const history = useHistory()
   const [name, setName] = useState('');
-  const {setUser, sendUser } = useContext(GlobalContext)
+  const {setUser, sendUser, setToken} = useContext(GlobalContext)
+  // const SERVER = "https://api-chat-react.herokuapp.com"
+  const SERVER = "http://localhost:5000"
  
 
   const classes = useStyles();
 
   const handleJoin = (event) => { 
-    sendUser({ name })
-    setUser(name)
-    history.push('/chat')
-    // Prevent the page from reloading
-    event.preventDefault();
+    axios.post(`${SERVER}/join`,
+      {
+          name
+      }).then(response => {
+          // Set token value
+          const token = response.data.token
+          setToken(token)
+          setUser(name)
+          sendUser({name, token})
+          history.push('/chat')
+      }).catch(error => {
+        console.log(error)
+      })
+      // Prevent the page from reloading
+      event.preventDefault();
 }
 
-  return (
+  return ( 
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>

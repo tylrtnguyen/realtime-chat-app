@@ -12,14 +12,13 @@ import Drawer from '@material-ui/core/Drawer'
 
 export const RoomList = () => {
   const classes = useStyles();
-  const {user, changeActiveRoom, rooms, getRooms, joinRoom, leaveRoom } = useContext(GlobalContext)
+  const {user, changeActiveRoom, token, rooms, getRooms, joinRoom, leaveRoom } = useContext(GlobalContext)
   const [currentRoom, setCurrentRoom] = useState('General')
   
 
   
   // Get rooms from the global state
   useEffect(() => {
-    const token = localStorage.getItem('token')
     getRooms(token)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

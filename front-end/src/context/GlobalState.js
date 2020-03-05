@@ -12,8 +12,7 @@ const initialState = {
   users:[],
   events:[],
   error: null,
-  loading: true,
-  loginStatus: null
+  loading: true
 }
 
 
@@ -48,39 +47,39 @@ export const GlobalProvider = ({children}) => {
     const [user, setUser] = useState('')
     const [activeRoom, changeActiveRoom ] = useState('General')
     const [state, dispatch] = useReducer(AppReducer, initialState)
-    const token = localStorage.getItem('token')
-    const SERVER = "https://api-chat-react.herokuapp.com";
+    const [token, setToken] = useState('')
+    // const SERVER = "https://api-chat-react.herokuapp.com";
+    const SERVER = "http://localhost:5000"
     
 
     // Socket.io client implementation    
     if(!socket){    
       socket = io(`${SERVER}/`)
       socket.on('chat message', function(msg) {
-          console.log(msg)
-          addChat(msg, token)
+        const token = localStorage.getItem('token')
+        addChat(msg, token)
       })
       
       socket.on('user joined', function(joinedUser){
-        const { name } = joinedUser
+        const { name, token } = joinedUser
+        localStorage.setItem('token',token)
         const event = {
             type:"User Join",
             user: name,
             source: "Guest Join"
         }
         addEvent(event, token)
-        addUser(joinedUser)
-         
       })
 
       socket.on('join room', function(joinRoomEvent) {
         const { user, room} = joinRoomEvent
-
         if(user) {
           const event = {
             type: "Join Room",
             user: user,
             source: room
           }
+          const token = localStorage.getItem('token')
           addEvent(event, token)
         }
       })
@@ -93,17 +92,20 @@ export const GlobalProvider = ({children}) => {
             user: user,
             source: room
           }
+          const token = localStorage.getItem('token')
           addEvent(event, token)
         }
       })
 
-      socket.on('user left', function(user) {
+      socket.on('user left', function(leftUser) {
           const event = {
             type:"User Left",
-            user: user,
+            user: leftUser,
             source: "Main Page"
           }
+          const token = localStorage.getItem('token')
           addEvent(event, token)
+          localStorage.removeItem('token')
       })
   }   
 
@@ -234,31 +236,6 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
-    // Add User
-    const addUser = async (user) => {
-      const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-      }
-
-      try {
-          const res = await axios.post(`${SERVER}/join`, user, config);
-          localStorage.setItem('token', res.data.token)
-          dispatch({
-            type: 'ADD_USER',
-            payload: res.data.data
-          });
-      }
-      catch (err) {
-        dispatch({
-          type: 'USER_ERROR',
-          payload: err.response.data.error
-        });
-      }
-  }
-
-
     return (
         <GlobalContext.Provider value={{
           /* List of items */
@@ -268,7 +245,6 @@ export const GlobalProvider = ({children}) => {
             users: state.users,
             events: state.events,
             loading: state.loading,
-            token: state.token, 
             /* Socket methods*/
             sendChatAction,
             sendUser,
@@ -276,6 +252,8 @@ export const GlobalProvider = ({children}) => {
             /* user getter and setter */
             user,
             setUser,
+            token,
+            setToken,
             activeRoom,
             changeActiveRoom,
             joinRoom,

@@ -39,16 +39,6 @@ export default (state, action) => {
                 ...state,
                 error: action.payload
             }
-        case 'USER_ERROR':
-            return {
-                ...state,
-                error: action.payload
-            }   
-        case 'ADD_USER':
-            return {
-                ...state,
-                loginStatus: action.payload
-            }
         case 'EVENT_ERROR':
             return {
                 ...state,

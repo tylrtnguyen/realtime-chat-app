@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import { GlobalContext } from "../../context/GlobalState"
 import { RoomList } from '../RoomList/RoomList'
 import Unauthorized from '../Unauthorized/Unauthorized'
+import './Style.css'
 
 
 const Chat = () => {  

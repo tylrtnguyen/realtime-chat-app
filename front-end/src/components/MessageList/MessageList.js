@@ -12,19 +12,18 @@ import SendIcon from '@material-ui/icons/Send';
 import Input from '@material-ui/core/Input';
 import { GlobalContext } from '../../context/GlobalState' 
 import { useStyles } from './UseStyles'
+import ScrollToBottom, { useScrollToBottom, useSticky } from 'react-scroll-to-bottom'
 
 
 
 export const MessageList = () => {
     const {chats, activeRoom, sendChatAction, sendUserLeft, 
-            getChats, user, users, getUsers} = useContext(GlobalContext)
+            getChats, user, token, users, getUsers} = useContext(GlobalContext)
     const [message, setMessage] = useState([])
     const [ navigate, setNavigate ] =useState(false)
     const classes = useStyles()
-    
 
     useEffect(() => {
-      const token = localStorage.getItem('token')
       getChats(token)
       getUsers(token)
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -32,8 +31,6 @@ export const MessageList = () => {
 
     const handleLogout = () => {
       sendUserLeft(user)
-      localStorage.removeItem('login')
-      localStorage.removeItem('token')
       setNavigate(true)
     }
 
@@ -53,9 +50,10 @@ export const MessageList = () => {
       return <Redirect to="/" push={true} />;
     }
     return(
-      <div className={classes.root}>
+      <div id="messageList" className={classes.root}>
             <Toolbar
               title={activeRoom}
+              key="toolbar"
               rightItems={
               [
                 <div>
@@ -71,7 +69,8 @@ export const MessageList = () => {
               ]}
               leftItems={[
                 <div>
-                  <Typography key="user_counts" variant="body1">
+                  <Typography key="user_counts" 
+                  variant="body1">
                   <PersonIcon key="Icon"></PersonIcon>{users.length}
                   </Typography>
                 </div>
