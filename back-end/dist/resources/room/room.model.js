@@ -22,10 +22,6 @@ const roomSchema = new Schema({
     required: true,
     unique: true
   },
-  status: {
-    type: String,
-    default: 'Active'
-  },
   created_at: {
     type: String,
     default: (0, _moment2.default)().format('llll')

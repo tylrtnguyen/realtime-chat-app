@@ -48,8 +48,8 @@ export const GlobalProvider = ({children}) => {
     const [activeRoom, changeActiveRoom ] = useState('General')
     const [state, dispatch] = useReducer(AppReducer, initialState)
     const [token, setToken] = useState('')
-    // const SERVER = "https://api-chat-react.herokuapp.com";
-    const SERVER = "http://localhost:5000"
+    const SERVER = "https://api-chat-react.herokuapp.com";
+    // const SERVER = "http://localhost:5000"
     
 
     // Socket.io client implementation    
