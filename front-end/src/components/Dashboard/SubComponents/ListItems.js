@@ -4,6 +4,7 @@ import PeopleIcon from '@material-ui/icons/People'
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AssignmentIcon from '@material-ui/icons/Assignment'
+import ChatIcon from '@material-ui/icons/Chat'
 import { Link } from "react-router-dom"
 
 export const ListItems = (
@@ -31,6 +32,12 @@ export const ListItems = (
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Events" />
+    </ListItem>
+    <ListItem button component={Link} to="/dashboard/chats">
+      <ListItemIcon>
+        <ChatIcon />
+      </ListItemIcon>
+      <ListItemText primary="Chats" />
     </ListItem>
   </div>
 );

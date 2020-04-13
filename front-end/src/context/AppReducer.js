@@ -34,6 +34,11 @@ export default (state, action) => {
                 ...state,
                 error: action.payload
             }
+        case 'ADD_ROOM':
+            return {
+                ...state,
+                rooms: [...state.rooms, action.payload]
+            }
         case 'ROOM_ERROR':
             return {
                 ...state,

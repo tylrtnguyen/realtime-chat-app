@@ -55,7 +55,7 @@ export const RoomList = () => {
       <ListItem>
         <Divider></Divider>
       </ListItem>
-      {rooms.map(room => (
+      {rooms.filter(room => room.status === 'Active').map(room => (
         <ListItem
           className={classes.listRoot}
           alignItems="flex-start"

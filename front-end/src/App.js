@@ -10,6 +10,7 @@ import { GlobalProvider } from './context/GlobalState'
 import  RoomsReport from './components/Dashboard/RoomsReport'
 import UsersReport from './components/Dashboard/UsersReport'
 import EventsReport from './components/Dashboard/EventsReport'
+import ChatsReport from './components/Dashboard/ChatsReport'
 
 const App = () => (
     <GlobalProvider>
@@ -21,6 +22,7 @@ const App = () => (
                 <Route path="/dashboard/rooms" component={ RoomsReport }/>
                 <Route path="/dashboard/users" component={ UsersReport }/>
                 <Route path="/dashboard/events" component={ EventsReport }/>
+                <Route path="/dashboard/chats" component={ ChatsReport } />
                 <Route path="*" component={NotFoundPage}/>
             </Switch>
         </BrowserRouter>

@@ -48,7 +48,8 @@ export const GlobalProvider = ({children}) => {
     const [activeRoom, changeActiveRoom ] = useState('General')
     const [state, dispatch] = useReducer(AppReducer, initialState)
     const [token, setToken] = useState('')
-    const SERVER = "https://api-chat-react.herokuapp.com";
+    // const SERVER = "https://api-chat-react.herokuapp.com";
+    const SERVER = "http://localhost:5000"
     
 
     // Socket.io client implementation    
@@ -211,6 +212,27 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
+    // Add Room
+  const addRoom = async (room, token) => {
+    const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+    }
+    try {
+        const res = await axios.post(`${SERVER}/api/room`, room, config);
+        
+        dispatch({
+          type: 'ADD_ROOM',
+          payload: res.data.data
+        });
+    }
+    catch (err) {
+        console.log(err.response.data.error)
+    }
+}
+
     // Add new chat to the DB
     const addChat = async (chat, token) => {
         const config = {
@@ -235,6 +257,7 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
+
     return (
         <GlobalContext.Provider value={{
           /* List of items */
@@ -257,6 +280,7 @@ export const GlobalProvider = ({children}) => {
             changeActiveRoom,
             joinRoom,
             leaveRoom,
+            addRoom,
             addChat,
             /* Get list of items */
             getUsers,
