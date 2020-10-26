@@ -29,7 +29,7 @@
 
 3.  **Start development sever**
 
-    Your site is now running at `http://localhost:8000`!
+    Your site is now running at `http://localhost:3000`!
     ```shell
     cd backend
     npm run dev
