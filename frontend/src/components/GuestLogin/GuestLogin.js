@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 export default function GuestLogin() {
   const history = useHistory()
   const [name, setName] = useState('');
-  const {loading, setUser, sendUser, setToken} = useContext(GlobalContext)
+  const {setUser, sendUser, setToken} = useContext(GlobalContext)
   const SERVER = "https://api-chat-react.herokuapp.com"
  
 

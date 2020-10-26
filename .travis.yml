@@ -9,5 +9,6 @@ before_install:
     - "npm config set spin false"
 install:
     - npm install
+    - npm update
 script:
     - npm run build
