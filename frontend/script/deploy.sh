@@ -1,1 +1,1 @@
-vercel public --token=$VERCEL_TOKEN
+vercel deploy --token=$VERCEL_TOKEN
