@@ -1,1 +1,1 @@
-now public --token=$NOW_TOKEN
+vercel public --token=$VERCEL_TOKEN

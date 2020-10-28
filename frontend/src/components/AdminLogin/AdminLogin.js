@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { SubmitValidate } from '../FormValidate/FormValidate'
+import { SubmitValidate } from '../../utils/FormValidate/FormValidate'
 import { useHistory } from 'react-router-dom'
 import { useStyles } from './UseStyles'
 import axios from 'axios'

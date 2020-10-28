@@ -6,7 +6,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import FaceIcon from "@material-ui/icons/Face";
-import { MessageValidate } from '../FormValidate/FormValidate'
+import { MessageValidate } from '../../utils/FormValidate/FormValidate'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/Send';
 import Input from '@material-ui/core/Input';
