@@ -8,7 +8,7 @@ import axios from "axios"
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles'; 
 import Container from '@material-ui/core/Container';
-import { JoinValidate } from '../FormValidate/FormValidate'
+import { JoinValidate } from '../../utils/FormValidate/FormValidate'
 import { useHistory } from 'react-router-dom'
 import { GlobalContext } from '../../context/GlobalState'
 

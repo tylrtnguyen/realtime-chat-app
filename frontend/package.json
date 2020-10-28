@@ -43,6 +43,9 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-react-hooks": "^2.5.1"
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
+    "eslint-plugin-react-hooks": "^2.5.1",
+    "react-test-renderer": "^17.0.1"
   }
 }

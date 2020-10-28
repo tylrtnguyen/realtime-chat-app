@@ -1,1 +1,1 @@
-now public --token=$NOW_TOKEN
+vercel deploy --token=$VERCEL_TOKEN
