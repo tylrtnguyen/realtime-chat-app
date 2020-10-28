@@ -10,7 +10,6 @@ before_install:
     - npm i -g vercel
 install:
     - npm install
-    - npm update
 script:
     - npm run test
     - npm run build
